@@ -1,0 +1,29 @@
+# Proxy URL, for example: http://127.0.0.1:7890
+proxy:
+# PikPak account username or phone number with country code
+username: xxx
+# PikPak account password
+password: xxx
+# Aria2 download settings
+aria2:
+  # Aria2 JSON-RPC URL (default: http://127.0.0.1:6800/jsonrpc)
+  rpc_url: http://127.0.0.1:6800/jsonrpc
+  # Aria2 RPC secret token (leave empty if not configured)
+  secret:
+  # Maximum connections per file (default: 16)
+  max_connections: 16
+  # Number of parts to split download (default: 16)
+  split: 16
+  # Minimum split size (default: 1M)
+  min_split_size: 1M
+  # Download directory (default: current directory)
+  download_dir:
+# Local open command settings
+open:
+  download_dir:
+  default: []
+  text: []
+  image: []
+  video: []
+  audio: []
+  pdf: []

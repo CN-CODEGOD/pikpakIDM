@@ -1,0 +1,47 @@
+package api
+
+import (
+	"bytes"
+	"fmt"
+
+	"github.com/pikpakidm/pikpakidm/internal/logx"
+	jsoniter "github.com/json-iterator/go"
+	"github.com/tidwall/gjson"
+)
+
+func (p *PikPak) RefreshToken() error {
+	url := "https://user.mypikpak.com/v1/auth/token"
+	m := map[string]string{
+		"client_id":     clientID,
+		"client_secret": clientSecret,
+		"grant_type":    "refresh_token",
+		"refresh_token": p.refreshToken,
+	}
+	bs, err := jsoniter.Marshal(&m)
+	if err != nil {
+		return err
+	}
+	req, err := p.newRequest("POST", url, bytes.NewBuffer(bs))
+	if err != nil {
+		return err
+	}
+	bs, err = p.sendRequest(req)
+	if err != nil {
+		return err
+	}
+	error_code := gjson.GetBytes(bs, "error_code").Int()
+	if error_code != 0 {
+		// refresh token failed
+		if error_code == 4126 {
+			// Retry with the full login flow when the refresh token is no longer valid.
+			return p.login()
+		}
+		return fmt.Errorf("refresh token error message: %d", gjson.GetBytes(bs, "error").Int())
+	}
+	// logrus.Debug("refresh: ", string(bs))
+	p.JwtToken = gjson.GetBytes(bs, "access_token").String()
+	p.refreshToken = gjson.GetBytes(bs, "refresh_token").String()
+	p.RefreshSecond = gjson.GetBytes(bs, "expires_in").Int()
+	logx.Debugln("session", "refresh token succeeded")
+	return nil
+}
