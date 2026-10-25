@@ -171,7 +171,7 @@ func getAria2DownloadDir() string {
 }
 
 func requiresExplicitOutputFlag(cmd *cobra.Command, args []string) bool {
-	if cmd.Flags().Changed("output") || len(args) <= 1 {
+	if cmd == nil || cmd.Flags().Changed("output") || len(args) <= 1 {
 		return false
 	}
 	for _, arg := range args {
