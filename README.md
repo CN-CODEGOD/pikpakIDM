@@ -3,6 +3,7 @@
 default config file path :~/.config/pikpakidm/config.yaml
 
 aria2:
+```
   # Aria2 JSON-RPC URL (default: http://127.0.0.1:6800/jsonrpc)
   rpc_url:
   # Aria2 RPC secret token (leave empty if not configured)
@@ -16,3 +17,4 @@ aria2:
   # Download directory (default: current directory)
   download_dir:
 # Local open command settings
+```
